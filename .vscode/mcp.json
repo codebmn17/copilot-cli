@@ -8,6 +8,24 @@
 			},
 			"gallery": "https://api.mcp.github.com",
 			"version": "0.27.0"
+		},
+		"com.postman/postman-mcp-server": {
+			"type": "stdio",
+			"command": "npx",
+			"args": [
+				"@postman/postman-mcp-server@2.5.2"
+			],
+			"env": {
+				"POSTMAN_API_KEY": "${input:POSTMAN_API_KEY}"
+			},
+			"gallery": "https://api.mcp.github.com",
+			"version": "2.5.2"
+		},
+		"com.figma.mcp/mcp": {
+			"type": "http",
+			"url": "https://mcp.figma.com/mcp",
+			"gallery": "https://api.mcp.github.com",
+			"version": "1.0.3"
 		}
 	},
 	"inputs": [
@@ -15,6 +33,12 @@
 			"id": "Authorization",
 			"type": "promptString",
 			"description": "Authentication token (PAT or App token)",
+			"password": true
+		},
+		{
+			"id": "POSTMAN_API_KEY",
+			"type": "promptString",
+			"description": "A valid Postman API key.",
 			"password": true
 		}
 	]

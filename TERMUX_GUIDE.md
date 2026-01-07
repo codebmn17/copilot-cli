@@ -1,4 +1,4 @@
-# GitHub Copilot CLI on Termux - Complete Guide
+⅚5# GitHub Copilot CLI on Termux - Complete Guide
 
 This guide helps you set up and optimize GitHub Copilot CLI on Termux with support for Ollama model serving and Google Drive storage integration.
 
