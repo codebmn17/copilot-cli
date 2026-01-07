@@ -92,6 +92,18 @@ For example, to install version `v0.0.369` to a custom directory:
 curl -fsSL https://gh.io/copilot-install | VERSION="v0.0.369" PREFIX="$HOME/custom" bash
 ```
 
+### Install on Termux (Android)
+
+For Termux users, we recommend installing via npm:
+
+```bash
+pkg update && pkg upgrade
+pkg install nodejs python git curl wget openssl
+npm install -g @github/copilot
+```
+
+See [Termux Installation Guide](TERMUX_GUIDE.md) for complete setup including Ollama integration and Google Drive backups.
+
 ### Launching the CLI
 
 ```bash
@@ -120,6 +132,47 @@ By default, `copilot` utilizes Claude Sonnet 4.5. Run the `/model` slash command
 Each time you submit a prompt to GitHub Copilot CLI, your monthly quota of premium requests is reduced by one. For information about premium requests, see [About premium requests](https://docs.github.com/copilot/managing-copilot/monitoring-usage-and-entitlements/about-premium-requests).
 
 For more information about how to use the GitHub Copilot CLI, see [our official documentation](https://docs.github.com/copilot/concepts/agents/about-copilot-cli).
+
+## 🚀 Extended Features
+
+### Ollama Integration
+
+Pull and manage models from your Ollama server directly within Copilot CLI:
+
+```bash
+copilot /ollama pull llama2
+copilot /ollama list
+copilot /ollama generate "What is AI?" --model llama2
+```
+
+See [Ollama Integration Guide](TERMUX_GUIDE.md#running-copilot-cli) for details.
+
+### Google Drive Storage Integration
+
+Backup and sync your trained models to Google Drive for cloud storage and cross-device access:
+
+```bash
+copilot /gdrive setup
+copilot /gdrive sync
+copilot /gdrive restore
+```
+
+Features:
+- **Model Backup**: Automatically sync trained models to Google Drive
+- **Cloud Storage**: Store large models in virtual storage
+- **Cross-Device Sync**: Access models from any device with Copilot CLI
+- **Training Snapshot**: Save model training data and checkpoints
+
+### Model Training & Management
+
+Train and fine-tune models locally, then export and share them:
+
+```bash
+copilot /models pull llama2           # Pull from Ollama
+copilot /models train llama2 data.txt # Train on local data
+copilot /models export training-123   # Export trained model
+copilot /models sync                  # Sync to Google Drive
+```
 
 ## 📢 Feedback and Participation
 

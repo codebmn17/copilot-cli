@@ -1,3 +1,78 @@
+## Enhanced Edition - 2026-01-07
+
+### Major Features Added
+- **Termux Support**: Full optimization for Android/Termux environment
+- **Ollama Integration**: Pull and manage models from Ollama servers
+- **Google Drive Storage**: Cloud backup and sync for trained models
+- **Model Management**: Train, export, and manage local models
+- **Cross-Device Sync**: Sync models between devices via Google Drive
+
+### New Modules
+- `lib/ollama-client.js`: Ollama server integration (500+ lines)
+- `lib/google-drive-manager.js`: Google Drive API integration (700+ lines)
+- `lib/model-manager.js`: Model lifecycle management (600+ lines)
+
+### New Commands (45+)
+- `/ollama` - Ollama server operations (list, pull, generate, delete)
+- `/gdrive` - Google Drive operations (setup, sync, restore, storage)
+- `/models` - Model management (pull, train, export, delete, sync)
+- `/config` - Configuration management
+- `/status` - Session and system status
+
+### New Documentation
+- `TERMUX_GUIDE.md` - Complete Termux setup and optimization
+- `GDRIVE_SETUP.md` - Step-by-step Google Drive integration
+- `COMMANDS_REFERENCE.md` - Complete CLI commands reference (900+ lines)
+- `DEPENDENCIES.md` - Package requirements and installation
+- `ENHANCEMENTS.md` - Feature overview and architecture
+- `QUICKREF.md` - Quick reference card with aliases and tips
+- `INDEX.md` - Complete project navigation guide
+
+### Installation Scripts
+- `termux-install.sh` - Optimized Termux installation
+
+### New Features
+- Stream-based text generation for real-time responses
+- Bidirectional model sync with Google Drive
+- Local model caching and management
+- Model training and fine-tuning support
+- Storage quota monitoring
+- Automatic backup capabilities
+- Memory-optimized operation for Termux
+- Compression support for efficient sync
+- Multiple Ollama server support
+- Training history and snapshot management
+
+### Performance Improvements
+- Memory-limited Node.js for Termux (512MB configurable)
+- Efficient file compression for sync
+- Background task support
+- Reduced network overhead
+- Connection pooling for Ollama
+
+### Security Enhancements
+- Secure credential storage
+- Token auto-refresh and rotation
+- Minimal required permissions
+- TLS encryption for transfers
+- File permission controls
+
+### Supported Platforms
+- ✅ Termux (Android)
+- ✅ Linux
+- ✅ macOS
+- ✅ Windows (via WSL)
+
+### Breaking Changes
+None. Fully backward compatible with existing Copilot CLI installations.
+
+### Migration Guide
+Existing users can opt-in to new features:
+1. No action needed for basic Copilot CLI
+2. Optional: Setup Google Drive for backups
+3. Optional: Configure Ollama for local models
+4. Optional: Use model training features
+
 ## 0.0.374 - 2026-01-02
 
 - MCP server type help text displays correct options
