@@ -124,6 +124,21 @@ rm -rf "$TMP_DIR"
 
 # Check if install directory is in PATH
 PATH_ADDED=false
+SHELL_RC=""
+
+# Determine shell RC file for macOS users
+if [ "$PLATFORM" = "darwin" ]; then
+  if [ -n "$ZSH_VERSION" ] || [ "$SHELL" = "/bin/zsh" ] || [ -f "$HOME/.zshrc" ]; then
+    SHELL_RC="$HOME/.zshrc"
+  elif [ -f "$HOME/.bash_profile" ]; then
+    SHELL_RC="$HOME/.bash_profile"
+  elif [ -f "$HOME/.bashrc" ]; then
+    SHELL_RC="$HOME/.bashrc"
+  else
+    SHELL_RC="$HOME/.zshrc"
+  fi
+fi
+
 case ":$PATH:" in
   *":$INSTALL_DIR:"*) 
     echo "✓ $INSTALL_DIR is already in your PATH"
@@ -134,19 +149,8 @@ case ":$PATH:" in
     
     # Auto-add to PATH on macOS if using default location
     if [ "$PLATFORM" = "darwin" ] && [ "$INSTALL_DIR" = "$HOME/.local/bin" ]; then
-      # Check for zsh (default macOS shell)
-      if [ -n "$ZSH_VERSION" ] || [ "$SHELL" = "/bin/zsh" ] || [ -f "$HOME/.zshrc" ]; then
-        SHELL_RC="$HOME/.zshrc"
-      elif [ -f "$HOME/.bash_profile" ]; then
-        SHELL_RC="$HOME/.bash_profile"
-      elif [ -f "$HOME/.bashrc" ]; then
-        SHELL_RC="$HOME/.bashrc"
-      else
-        SHELL_RC="$HOME/.zshrc"
-      fi
-      
-      # Check if PATH export already exists
-      if ! grep -q "PATH.*\.local/bin" "$SHELL_RC" 2>/dev/null; then
+      # Check if PATH export already exists (more specific pattern)
+      if ! grep -qE '^\s*export\s+PATH.*\.local/bin' "$SHELL_RC" 2>/dev/null; then
         echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$SHELL_RC"
         echo "✓ Added $INSTALL_DIR to PATH in $SHELL_RC"
         PATH_ADDED=true
@@ -190,9 +194,13 @@ echo "║           ✓ Installation Complete!                        ║"
 echo "╚════════════════════════════════════════════════════════════╝"
 echo ""
 echo "Next Steps:"
-echo "  1. Reload your shell: source $SHELL_RC" 
-if [ "$PATH_ADDED" = true ]; then
-  echo "     (or open a new terminal window)"
+if [ -n "$SHELL_RC" ]; then
+  echo "  1. Reload your shell: source $SHELL_RC"
+  if [ "$PATH_ADDED" = true ]; then
+    echo "     (or open a new terminal window)"
+  fi
+else
+  echo "  1. Reload your shell or open a new terminal window"
 fi
 echo "  2. Start Copilot CLI: copilot"
 echo "  3. Authenticate: copilot auth login"

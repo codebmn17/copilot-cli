@@ -113,7 +113,7 @@ After installation:
 1. **Authenticate with GitHub:**
    ```bash
    copilot
-   /login
+   copilot auth login
    ```
 
 2. **Choose your AI model:**
