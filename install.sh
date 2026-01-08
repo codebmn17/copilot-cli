@@ -123,15 +123,81 @@ echo "✓ GitHub Copilot CLI installed to $INSTALL_DIR/copilot"
 rm -rf "$TMP_DIR"
 
 # Check if install directory is in PATH
+PATH_ADDED=false
 case ":$PATH:" in
-  *":$INSTALL_DIR:"*) ;;
+  *":$INSTALL_DIR:"*) 
+    echo "✓ $INSTALL_DIR is already in your PATH"
+    ;;
   *)
     echo ""
     echo "Warning: $INSTALL_DIR is not in your PATH"
-    echo "Add it to your PATH by adding this line to your shell profile:"
-    echo "  export PATH=\"\$PATH:$INSTALL_DIR\""
+    
+    # Auto-add to PATH on macOS if using default location
+    if [ "$PLATFORM" = "darwin" ] && [ "$INSTALL_DIR" = "$HOME/.local/bin" ]; then
+      # Check for zsh (default macOS shell)
+      if [ -n "$ZSH_VERSION" ] || [ "$SHELL" = "/bin/zsh" ] || [ -f "$HOME/.zshrc" ]; then
+        SHELL_RC="$HOME/.zshrc"
+      elif [ -f "$HOME/.bash_profile" ]; then
+        SHELL_RC="$HOME/.bash_profile"
+      elif [ -f "$HOME/.bashrc" ]; then
+        SHELL_RC="$HOME/.bashrc"
+      else
+        SHELL_RC="$HOME/.zshrc"
+      fi
+      
+      # Check if PATH export already exists
+      if ! grep -q "PATH.*\.local/bin" "$SHELL_RC" 2>/dev/null; then
+        echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$SHELL_RC"
+        echo "✓ Added $INSTALL_DIR to PATH in $SHELL_RC"
+        PATH_ADDED=true
+      fi
+    else
+      echo "Add it to your PATH by adding this line to your shell profile:"
+      echo "  export PATH=\"$INSTALL_DIR:\$PATH\""
+    fi
     ;;
 esac
 
+# Optional: Try to install Python packages for enhanced features (macOS only)
+if [ "$PLATFORM" = "darwin" ]; then
+  echo ""
+  echo "Checking for optional Python packages (Google Drive & Ollama support)..."
+  
+  # Check if pip is available
+  if command -v pip3 >/dev/null 2>&1; then
+    PYTHON_PACKAGES=("google-api-python-client" "google-auth-oauthlib")
+    INSTALLED_COUNT=0
+    
+    for package in "${PYTHON_PACKAGES[@]}"; do
+      if pip3 install --user "$package" >/dev/null 2>&1; then
+        INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
+      fi
+    done
+    
+    if [ $INSTALLED_COUNT -gt 0 ]; then
+      echo "✓ Installed $INSTALLED_COUNT optional Python package(s)"
+    fi
+  else
+    echo "⚠ pip3 not found - skipping optional Python packages"
+    echo "  (This is fine! Core Copilot CLI works without them)"
+    echo "  Python packages are only needed for Google Drive sync and Ollama integration"
+  fi
+fi
+
 echo ""
-echo "Installation complete! Run 'copilot help' to get started."
+echo "╔════════════════════════════════════════════════════════════╗"
+echo "║           ✓ Installation Complete!                        ║"
+echo "╚════════════════════════════════════════════════════════════╝"
+echo ""
+echo "Next Steps:"
+echo "  1. Reload your shell: source $SHELL_RC" 
+if [ "$PATH_ADDED" = true ]; then
+  echo "     (or open a new terminal window)"
+fi
+echo "  2. Start Copilot CLI: copilot"
+echo "  3. Authenticate: copilot auth login"
+echo ""
+if [ "$PLATFORM" = "darwin" ]; then
+  echo "📖 For macOS-specific tips, see: MACOS_INSTALL.md"
+  echo ""
+fi
