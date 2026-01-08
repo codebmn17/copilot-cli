@@ -8,7 +8,7 @@ Install GitHub Copilot CLI using the official install script:
 curl -fsSL https://gh.io/copilot-install | bash
 ```
 
-Then add `~/.local/bin` to your PATH:
+**Note:** The install script automatically adds `~/.local/bin` to your PATH in `~/.zshrc` (or `.bash_profile`/`.bashrc` if you use bash). If the automatic PATH setup doesn't work for your shell configuration, you can add it manually:
 
 ```bash
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc

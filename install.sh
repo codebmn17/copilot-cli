@@ -150,7 +150,7 @@ case ":$PATH:" in
     # Auto-add to PATH on macOS if using default location
     if [ "$PLATFORM" = "darwin" ] && [ "$INSTALL_DIR" = "$HOME/.local/bin" ]; then
       # Check if PATH export already exists (more specific pattern)
-      if ! grep -qE '^\s*export\s+PATH.*\.local/bin' "$SHELL_RC" 2>/dev/null; then
+      if ! grep -qE '^\s*export\s+PATH=.*\$HOME/\.local/bin' "$SHELL_RC" 2>/dev/null; then
         echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$SHELL_RC"
         echo "✓ Added $INSTALL_DIR to PATH in $SHELL_RC"
         PATH_ADDED=true
@@ -171,15 +171,31 @@ if [ "$PLATFORM" = "darwin" ]; then
   if command -v pip3 >/dev/null 2>&1; then
     PYTHON_PACKAGES=("google-api-python-client" "google-auth-oauthlib")
     INSTALLED_COUNT=0
+    SUCCESS_PACKAGES=()
+    FAILED_PACKAGES=()
     
     for package in "${PYTHON_PACKAGES[@]}"; do
-      if pip3 install --user "$package" >/dev/null 2>&1; then
+      # Suppress normal pip output but preserve stderr for debugging
+      if pip3 install --user "$package" >/dev/null; then
         INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
+        SUCCESS_PACKAGES+=("$package")
+        echo "  ✓ $package"
+      else
+        FAILED_PACKAGES+=("$package")
       fi
     done
     
     if [ $INSTALLED_COUNT -gt 0 ]; then
       echo "✓ Installed $INSTALLED_COUNT optional Python package(s)"
+    fi
+    
+    if [ ${#FAILED_PACKAGES[@]} -gt 0 ]; then
+      echo "⚠ Some optional Python packages were not installed:"
+      for pkg in "${FAILED_PACKAGES[@]}"; do
+        echo "  - $pkg"
+      done
+      echo "  These are optional; core Copilot CLI works without them."
+      echo "  You can try installing manually with: pip3 install --user <package-name>"
     fi
   else
     echo "⚠ pip3 not found - skipping optional Python packages"
