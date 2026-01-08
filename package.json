@@ -1,0 +1,23 @@
+{
+  "name": "copilot-cli-tools",
+  "version": "1.0.0",
+  "description": "GitHub Copilot CLI tools, enhancements, and documentation for Termux and macOS",
+  "scripts": {
+    "install:mac": "./install.sh",
+    "install:termux": "./termux-install.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codebmn17/copilot-cli.git"
+  },
+  "keywords": [
+    "copilot",
+    "cli",
+    "termux",
+    "macos",
+    "ollama",
+    "google-drive"
+  ],
+  "author": "codebmn17",
+  "license": "MIT"
+}

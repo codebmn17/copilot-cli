@@ -92,6 +92,22 @@ For example, to install version `v0.0.369` to a custom directory:
 curl -fsSL https://gh.io/copilot-install | VERSION="v0.0.369" PREFIX="$HOME/custom" bash
 ```
 
+### Install on macOS
+
+The install script provides the best experience on macOS with automatic PATH setup:
+
+```bash
+curl -fsSL https://gh.io/copilot-install | bash
+```
+
+After installation, reload your shell or open a new terminal:
+
+```bash
+source ~/.zshrc
+```
+
+**See [macOS Installation Guide](MACOS_INSTALL.md) for detailed instructions, troubleshooting, and optional features.**
+
 ### Install on Termux (Android)
 
 For Termux users, we recommend installing via npm:
@@ -102,7 +118,7 @@ pkg install nodejs python git curl wget openssl
 npm install -g @github/copilot
 ```
 
-See [Termux Installation Guide](TERMUX_GUIDE.md) for complete setup including Ollama integration and Google Drive backups.
+**See [Termux Installation Guide](TERMUX_GUIDE.md) for complete setup including Ollama integration and Google Drive backups.**
 
 ### Launching the CLI
 
